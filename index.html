@@ -21,6 +21,23 @@
       --accent-pale: #F4FAF6;
       --border: rgba(0,0,0,0.08);
       --shadow: 0 2px 24px rgba(0,0,0,0.06);
+      --toggle-bg: #E8E4DD;
+      --toggle-icon-bg: #FFFFFF;
+    }
+
+    [data-theme="dark"] {
+      --cream: #111110;
+      --warm-white: #1C1C1B;
+      --ink: #EDE9E2;
+      --ink-light: #A8A49D;
+      --ink-muted: #605C57;
+      --accent: #6DB882;
+      --accent-light: #1A2E20;
+      --accent-pale: #141D16;
+      --border: rgba(255,255,255,0.08);
+      --shadow: 0 2px 24px rgba(0,0,0,0.4);
+      --toggle-bg: #2C2C2B;
+      --toggle-icon-bg: #3A3A39;
     }
 
     html { scroll-behavior: smooth; }
@@ -31,7 +48,40 @@
       color: var(--ink);
       min-height: 100vh;
       overflow-x: hidden;
+      transition: background 0.35s ease, color 0.35s ease;
     }
+
+    /* ── THEME TOGGLE ── */
+    .theme-toggle {
+      position: fixed;
+      top: 20px;
+      right: 24px;
+      z-index: 999;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: var(--toggle-bg);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      transition: background 0.35s ease, border-color 0.35s ease, transform 0.2s ease, box-shadow 0.2s ease;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+    }
+
+    .theme-toggle:hover {
+      transform: scale(1.1);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    }
+
+    .theme-toggle .icon-sun,
+    .theme-toggle .icon-moon { transition: opacity 0.25s ease, transform 0.25s ease; position: absolute; }
+    [data-theme="dark"] .icon-sun  { opacity: 1;  transform: rotate(0deg); }
+    [data-theme="dark"] .icon-moon { opacity: 0;  transform: rotate(90deg); }
+    :not([data-theme="dark"]) .icon-sun  { opacity: 0;  transform: rotate(-90deg); }
+    :not([data-theme="dark"]) .icon-moon { opacity: 1;  transform: rotate(0deg); }
 
     /* ── HERO ── */
     .hero {
@@ -227,7 +277,7 @@
       background: var(--warm-white);
       padding: 36px 32px;
       border: 1px solid var(--border);
-      transition: border-color 0.3s;
+      transition: border-color 0.3s, background 0.35s ease;
     }
 
     .about-card:hover { border-color: rgba(74,124,89,0.3); }
@@ -272,7 +322,7 @@
       padding: 48px 36px;
       position: relative;
       overflow: hidden;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.35s ease, border-color 0.35s ease;
       cursor: default;
     }
 
@@ -387,6 +437,12 @@
 </head>
 <body>
 
+  <!-- THEME TOGGLE -->
+  <button class="theme-toggle" id="theme-toggle" aria-label="테마 전환" title="다크/라이트 모드 전환">
+    <span class="icon-sun">☀️</span>
+    <span class="icon-moon">🌙</span>
+  </button>
+
   <!-- HERO -->
   <section class="hero">
     <p class="hero-label">안녕하세요, 저는</p>
@@ -493,6 +549,25 @@
   </footer>
 
   <script>
+    /* ── THEME ── */
+    (function () {
+      const saved = localStorage.getItem('theme');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const theme = saved || (prefersDark ? 'dark' : 'light');
+      if (theme === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+    })();
+
+    document.getElementById('theme-toggle').addEventListener('click', function () {
+      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      if (isDark) {
+        document.documentElement.removeAttribute('data-theme');
+        localStorage.setItem('theme', 'light');
+      } else {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        localStorage.setItem('theme', 'dark');
+      }
+    });
+
     function drawLotto() {
       const nums = new Set();
       while (nums.size < 6) nums.add(Math.floor(Math.random() * 45) + 1);
