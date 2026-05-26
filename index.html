@@ -586,6 +586,29 @@
     </div>
   </section>
 
+  <!-- DISQUS COMMENTS -->
+  <section class="section" style="padding-top: 60px; padding-bottom: 60px;">
+    <div class="section-header reveal">
+      <span class="section-num">✦</span>
+      <div class="section-line"></div>
+      <h2 class="section-title">댓글</h2>
+    </div>
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = 'https://heisenberg-k9.github.io/youtube-jocoding-IT_Product/';
+        this.page.identifier = 'homepage-main';
+      };
+      (function() {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://alphakoo.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <noscript>댓글을 보려면 JavaScript를 활성화해주세요. <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </section>
+
   <hr class="divider" />
 
   <!-- ABOUT -->
